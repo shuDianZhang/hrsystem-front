@@ -1,0 +1,35 @@
+.container {
+  height: 100%;
+}
+.loginArea {
+  width: 500px;
+  background-color: rgba(255, 255, 255, .6);
+  padding: 50px 100px;
+  border-radius: 10px;
+  position: absolute;
+  top: 150px;
+  left: calc(50% - 200px);
+}
+.sysName {
+  text-align: center;
+  color: #1890FF;
+  font-weight: 100;
+}
+.bghr {
+  height: 92%;
+  background-image: url('../img/hrbg.jpg');
+  background-size: cover;
+}
+.footBar {
+  height: 8%;
+  color: #ffffff;
+  background-color: #34455f;
+  overflow: hidden;
+}
+.webInfo {
+  font-family: "微软雅黑";
+  font-size: 12px;
+  text-align: center;
+  margin-top: 4px;
+}
+  

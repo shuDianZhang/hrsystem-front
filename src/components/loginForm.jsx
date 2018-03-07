@@ -20,8 +20,11 @@ class NormalLoginForm extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         fetch('http://localhost:3012', {
-          methods: 'post',
-          mode: 'cors'
+          method: 'POST',
+          body: 'shujian',
+          headers: new Headers({
+            'Content-Type': 'application/json'
+          })
         }).then(function (response) {
           console.log(response);
         }, function (err) {

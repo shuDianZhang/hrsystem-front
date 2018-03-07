@@ -1,0 +1,28 @@
+.timeArea {
+    width: 400px;
+    height: 300px;
+    border: 2px solid #EBEDF0;
+    border-radius: 4px;
+}
+.wish, .data, .showTime {
+    text-align: center;
+}
+.wish{
+    font-size: 20px;
+    margin-top: 10px;
+}
+.data {
+    font-size: 20px;
+    margin-top: 10px;
+}
+.showTime {
+    font-size: 60px;
+    margin-top: 20px;
+}
+.clockIn {
+    margin: 20px;
+}
+.buttonArea {
+    width: 400px;
+    text-align: center;
+}

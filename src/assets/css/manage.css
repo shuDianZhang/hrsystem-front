@@ -4,3 +4,32 @@
   background-size: cover;
   margin: 16px;
 }
+.sectionRight {
+  float: right;
+  position: relative;
+  width: 180px;
+  height: 50px;
+  text-align: center;
+}
+.userIcon {
+  position: absolute;
+  left: -18px;
+  top: 4px;
+  cursor: pointer;
+}
+.user, .separat, .logout {
+  display: inline-block;
+  vertical-align: top;
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+}
+.separat {
+  margin: 0 10px;
+}
+.logout {
+  cursor: pointer;
+}
+.uploadImage {
+  margin: 50px 0 50px 180px;
+}

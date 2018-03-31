@@ -6,6 +6,11 @@ import Clockin from './components/clockIn';
 import Employeeinfo from './components/employeeInfo';
 import Changepassword from './components/changePassword';
 import Payment from './components/payment'
+import Holiday from './components/holiday'
+import Attendance from './components/attendance'
+import Aducation from './components/aducation'
+import SendResume from './pages/sendresume'
+import RewardAndPunishRecord from './components/rewardAndPunishRecord'
 
 export default () => (
     <Router history={hashHistory}>
@@ -13,8 +18,13 @@ export default () => (
         <Route path="/manage" component={Manage}>
             <IndexRoute component={Clockin} />
             <Route path="employeeinfo" component={Employeeinfo} />
-            <Route path="changepassword" component={Changepassword}/>
-            <Route path="payment" component={Payment}/>
+            <Route path="changepassword" component={Changepassword} />
+            <Route path="payment" component={Payment} />
+            <Route path="holiday" component={Holiday} />
+            <Route path="attendance" component={Attendance} />
+            <Route path="aducation" component={Aducation} />
+            <Route path="record" component={RewardAndPunishRecord} />
         </Route>
+        <Route path="sendresume" component={SendResume}></Route>
     </Router>
 )

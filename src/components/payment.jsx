@@ -1,8 +1,24 @@
-import React from 'react';
-import { DatePicker, Button } from 'antd';
+import React, { Component } from 'react';
+import { DatePicker, Table, Button } from 'antd';
 import './css/payment.css';
 
-export default class Payment extends React.Component {
+export default class Payment extends Component {
+    constructor() {
+        super();
+        this.state = {
+            dataContent: []
+        }
+        this.columnsContent = [
+            { title: '时间', dataIndex: 'time' },
+            { title: '基本工资（元）', dataIndex: 'baseSalary' },
+            { title: '服务津贴（元）', dataIndex: 'serviceSalary' },
+            { title: '奖励金额（元）', dataIndex: 'rewardSalary' },
+            { title: '加班工资（元）', dataIndex: 'overtimeSalary' },
+            { title: '惩罚扣款金额（元）', dataIndex: 'punishMoney' },
+            { title: '应发工资（元）', dataIndex: 'shouldPay' },
+            { title: '实发工资（元）', dataIndex: 'actualPay' }
+        ];
+    }
     onChange(date, dateString) {
         console.log(date, dateString);
     }
@@ -15,15 +31,9 @@ export default class Payment extends React.Component {
                     <Button type="primary" icon="search">查 询</Button>
                 </div>
                 <h2>工资清单：</h2>
-                <span>姓名：</span><div className="moneyShow">舒健</div><br />
-                <span>员工基本工资：</span><div className="moneyShow">5600</div><br />
-                <span>职务津贴：</span><div className="moneyShow">400</div><br />
-                <span>奖励金额：</span><div className="moneyShow">1200</div><br />
-                <span>员工加班工资：</span><div className="moneyShow">470</div><br />
-                <span>奖罚扣款金额：</span><div className="moneyShow">300</div><br />
-                <span>其他奖励金额：</span><div className="moneyShow">300</div><br />
-                <span>应发工资：</span><div className="moneyShow">7200</div><br />
-                <span>实发工资：</span><div className="moneyShow">7000</div><br />
+                <div style={{ height: 250 }}>
+                    <Table columns={this.columnsContent} dataSource={this.state.dataContent} size="small" pagination={{ pageSize: 5 }} />
+                </div>
             </div>
         )
     }

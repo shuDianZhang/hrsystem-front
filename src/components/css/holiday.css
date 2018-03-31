@@ -1,0 +1,18 @@
+.selectArea, .reason, .examination, .handUp, .holidayLong {
+  margin-top: 20px;
+}
+.radioGroup, .day {
+  margin-left: 10px;
+}
+.selectHoliday, .selectArea {
+  width: 200px;
+}
+.reason {
+  width: 400px;
+}
+.upload {
+  margin: 20px 0 10px;
+}
+.handUp {
+  width: 150px;
+} 

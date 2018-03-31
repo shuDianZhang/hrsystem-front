@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Timeline } from 'antd';
 
 import './css/employeeInfo.css'
 
@@ -12,7 +13,8 @@ export default class EmployeeInfo extends Component {
                 <span className="infoTag">民族：</span><div className="infoShow">汉</div>&nbsp;&nbsp;&nbsp;
                 <span className="infoTag">身份证号：</span><div className="infoShow middle">360124199609065111</div>&nbsp;&nbsp;&nbsp;
                 <span className="infoTag">出生日期：</span><div className="infoShow">1996-10-17</div><br />
-                <span className="infoTag">家庭住址：</span><div className="infoShow long">广西省百色市田阳县高中路5号前途文具店</div>&nbsp;&nbsp;&nbsp;
+                <span className="infoTag">婚姻状况：</span><div className="infoShow">未婚</div>&nbsp;&nbsp;&nbsp;
+                <span className="infoTag">户籍所在地：</span><div className="infoShow long">广西省百色市右江区中山一路49号</div>&nbsp;&nbsp;&nbsp;
                 <span className="infoTag">联系电话：</span><div className="infoShow">17687467066</div>&nbsp;&nbsp;&nbsp;
                 <h2>教育经历：</h2>
                 <table className="education">
@@ -39,8 +41,15 @@ export default class EmployeeInfo extends Component {
                     </tbody>
                 </table>
                 <h2>职位信息：</h2>
-                <span className="infoTag">职位：</span><div className="infoShow job">web前端开发工程师</div><br/>
-                <span className="infoTag">所获荣誉：</span><div className="reward">dddd</div>
+                <span className="infoTag">所属部门：</span><div className="infoShow job">平台前端开发部</div><br />
+                <span className="infoTag">职位：</span><div className="infoShow job">web前端开发工程师</div><br />
+                <span className="infoTag">所获荣誉：</span>
+                <Timeline className="reward">
+                    <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
+                    <Timeline.Item>Solve initial network problems 2015-09-01</Timeline.Item>
+                    <Timeline.Item>Technical testing 2015-09-01</Timeline.Item>
+                    <Timeline.Item>Network problems being solved 2015-09-01</Timeline.Item>
+                </Timeline>
             </div>
         )
     }

@@ -1,0 +1,57 @@
+.resumePage {
+    width: 50%;
+    margin: 30px auto;
+    padding-bottom: 10px;
+    box-shadow: darkgrey 3px 3px 10px 2px ;
+    position: relative;
+    overflow: hidden;
+}
+.topImg {
+    height: 150px;
+    background-image: url('../img/banner.png');
+    background-size: cover;
+}
+.headImg {
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    top: 50px;
+    left: calc(50% - 65px);
+    border-radius: 50%;
+    border: 5px solid #ffffff;
+    background-image: url('../img/head.jpg'); 
+    background-size: contain;
+}
+.resumeTitle {
+    margin: 30px 0 0 30px;
+}
+.workHis {
+    padding: 40px 40px 0 40px;
+}
+.hidden {
+    display: none;
+}
+.company {
+    margin: 0;
+    font-size: 16px;
+    color: #000000;
+}
+.rangeTime {
+    float: right;
+}
+.jobContent {
+    margin-top: 10px;
+    color: #000000;
+}
+.addWorkExpContainer {
+    height: 50px;
+}
+.addWorkExp {
+    float: right;
+    margin-right: 40px;
+    font-size: 40px;
+    cursor: pointer;
+}
+.buttonContainer {
+    text-align: center;
+}

@@ -13,10 +13,12 @@ export default class Manage extends Component {
     constructor() {
         super();
         this.state = {
+            selectItem: 1,
             accountType: 1,
             isLogin: false,
             collapsed: false,
-            visible: false
+            visible: false,
+            topMenuInfo: {}
         };
         this.onCollapse = this.onCollapse.bind(this);
         this.showModal = this.showModal.bind(this);
@@ -27,11 +29,23 @@ export default class Manage extends Component {
         console.log(collapsed);
         this.setState({ collapsed });
     }
+    // 根据URL初始化menu选中的Item
+    selectItemMethod() {
+        let hashTag = {
+            '#/manage': 1, '#/manage/employeeinfo': 2, '#/manage/changepassword': 4,
+            '#/manage/aducation': 5, '#/manage/record': 6, '#/manage/payment': 7,
+            '#/manage/attendance': 8, '#/manage/holiday': 9
+        };
+        let getHash = window.location.hash;
+        for (var item in hashTag) {
+            if (getHash === item) {
+                this.setState({ selectItem: hashTag[item] });
+            }
+        }
+    }
     componentWillMount() {
-        fetch('http://localhost:3111/user/checklogin', {
-            method: 'POST',
-            credentials: 'include'
-        })
+        // 判断用户是否登陆
+        fetch('http://localhost:3111/user/checklogin', { method: 'POST', credentials: 'include' })
             .then((response) => response.json())
             .then((data) => {
                 if (data && data.status != 0) {
@@ -43,6 +57,20 @@ export default class Manage extends Component {
             }, (err) => {
                 message.error(err);
             })
+        // 获取管理页面顶部信息
+        fetch('http://localhost:3111/search/getTopMenuInfo', { method: 'GET', credentials: 'include' })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data && data.status != 0) {
+                    message.error('请先登录!');
+                    hashHistory.push('/');
+                } else {
+                    this.setState({ topMenuInfo: data.content });
+                }
+            }, (err) => {
+                message.error(err);
+            })
+        this.selectItemMethod();
     }
     logout() {
         fetch('http://localhost:3111/user/logout', {
@@ -66,11 +94,19 @@ export default class Manage extends Component {
         this.setState({ visible: true });
     }
     handleOk(e) {
-        console.log(e);
+        let topMenuInfo = this.state.topMenuInfo;
+        fetch(`http://localhost:3111/upload/headimage`, { method: 'POST', credentials: 'include' })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === 0) {
+                    message.success('头像上传成功!');
+                    topMenuInfo.hasHeadImg = true;
+                    this.setState({ topMenuInfo: topMenuInfo });
+                }
+            }, (err) => { console.error(err) })
         this.setState({ visible: false });
     }
     handleCancel(e) {
-        console.log(e);
         this.setState({ visible: false });
     }
     render() {
@@ -82,7 +118,7 @@ export default class Manage extends Component {
                     onCollapse={this.onCollapse}
                 >
                     <div className="logo" />
-                    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+                    <Menu theme="dark" defaultSelectedKeys={[`${this.state.selectItem}`]} mode="inline">
                         <Menu.Item key="1">
                             <Link to="/manage">
                                 <Icon type="like-o" />
@@ -96,10 +132,9 @@ export default class Manage extends Component {
                             }</span></span>}
                         >
                             <Menu.Item key="2"><Link to="/manage/employeeinfo">查询个人信息</Link></Menu.Item>
-                            <Menu.Item key="3">修改个人信息</Menu.Item>
                             {
                                 this.state.accountType === 1 ?
-                                    null : (<Menu.Item key="10">查看职员信息</Menu.Item>)
+                                    null : <Menu.Item key="3">查看职员信息</Menu.Item>
                             }
                         </SubMenu>
                         <SubMenu
@@ -112,12 +147,15 @@ export default class Manage extends Component {
                                     null : (<Menu.Item key="11">职员账户管理</Menu.Item>)
                             }
                         </SubMenu>
-                        <SubMenu
-                            key="sub3"
-                            title={<span><Icon type="usergroup-add" /><span>招聘面试</span></span>}
-                        >
-                            <Menu.Item key="12"><Link to="">邀请面试</Link></Menu.Item>
-                        </SubMenu>
+                        {
+                            this.state.accountType === 2 ?
+                                <SubMenu
+                                    key="sub3"
+                                    title={<span><Icon type="usergroup-add" /><span>招聘面试</span></span>}
+                                >
+                                    <Menu.Item key="12"><Link to="/manage/interview">邀请面试</Link></Menu.Item>
+                                </SubMenu> : null
+                        }
                         <Menu.Item key="5">
                             <Link to="/manage/aducation">
                                 <Icon type="bulb" />
@@ -153,8 +191,8 @@ export default class Manage extends Component {
                 <Layout>
                     <Header style={{ background: '#fff', padding: 0, height: 50 }}>
                         <div className="sectionRight">
-                            <Avatar className="userIcon" onClick={this.showModal} size="large" icon="user" src="http://p5eq9w66k.bkt.clouddn.com/bingguo.jpg" />
-                            <span className="user">舒健</span><span className="separat">|</span><span onClick={this.logout} className="logout">退出</span>
+                            <Avatar className="userIcon" onClick={this.showModal} size="large" icon="user" src={this.state.topMenuInfo.hasHeadImg ? `http://p6g8b7pfx.bkt.clouddn.com/headIcon${this.state.topMenuInfo._id}.jpg-jvzhong?v=${new Date().getTime()}` : "http://p6g8b7pfx.bkt.clouddn.com/head$%23&%25%25%2319960906.jpg"} />
+                            <span className="user">{this.state.topMenuInfo.name}</span><span className="separat">|</span><span onClick={this.logout} className="logout">退出</span>
                         </div>
                     </Header>
                     <Content style={{ margin: 16 }}>
@@ -174,7 +212,7 @@ export default class Manage extends Component {
                     onCancel={this.handleCancel}
                 >
                     <div className="uploadImage">
-                        <Upload />
+                        <Upload _id={this.state.topMenuInfo._id} hasHead={this.state.topMenuInfo.hasHeadImg} headType="employee" />
                     </div>
                 </Modal>
             </Layout>

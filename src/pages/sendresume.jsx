@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Input, Tooltip, Icon, Select, Row, Col, Button, AutoComplete, DatePicker, Upload, message } from 'antd';
+import { Form, Input, Tooltip, Icon, Select, Row, Col, Button, AutoComplete, DatePicker, Upload, message, Modal } from 'antd';
 import moment from 'moment'
+
+import MakeUpload from '../components/uploadImage'
 
 import '../assets/css/sendresume.css'
 
@@ -27,8 +29,8 @@ class stepOne extends Component {
             autoCompleteResult: [],
             formContent: {
                 "name": "",
-                "birthday": null,
-                "degree": "",
+                "birthday": "",
+                "hightDegree": "",
                 "email": "",
                 "phone": "",
                 "sex": "",
@@ -64,8 +66,13 @@ class stepOne extends Component {
         let content = {};
         for (var key in formContent) {
             if (key === 'birthday') {
-                content[key] = moment(sessionStorage.getItem(key));
-                continue;
+                if (sessionStorage.getItem(key)) {
+                    content[key] = moment(sessionStorage.getItem(key));
+                    continue;
+                } else {
+                    content[key] = moment('Mon Jan 01 2018 11:23:21 GMT+0800');
+                    continue;
+                }
             }
             content[key] = sessionStorage.getItem(key);
         }
@@ -119,8 +126,8 @@ class stepOne extends Component {
                         rules: [{ required: true, message: '请输入你的性别!' }],
                     })(
                         <Select>
-                            <Option value="male">男</Option>
-                            <Option value="female">女</Option>
+                            <Option value="男">男</Option>
+                            <Option value="女">女</Option>
                         </Select>
                         )}
                 </FormItem>
@@ -140,8 +147,8 @@ class stepOne extends Component {
                     labelCol={{ span: 6 }}
                     wrapperCol={{ span: 8 }}
                 >
-                    {getFieldDecorator('degree', {
-                        initialValue: this.state.formContent.degree,
+                    {getFieldDecorator('hightDegree', {
+                        initialValue: this.state.formContent.hightDegree,
                         rules: [{ required: true, message: '请输入你的最高学历!' }],
                     })(
                         <Select>
@@ -841,6 +848,7 @@ class stepSix extends Component {
     constructor() {
         super();
         this.state = {
+            aboutMyself: ''
         }
         this.goback = this.goback.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -849,13 +857,19 @@ class stepSix extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                sessionStorage.setItem('aboutMyself', values.aboutMyself);
                 this.props.changeStep(7);
             }
         });
     }
     goback() {
         this.props.changeStep(5);
+    }
+    componentWillMount() {
+        let aboutMyself = sessionStorage.getItem('aboutMyself');
+        if (aboutMyself) {
+            this.setState({ aboutMyself: aboutMyself });
+        }
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -876,6 +890,7 @@ class stepSix extends Component {
                     label="自我描述"
                 >
                     {getFieldDecorator('aboutMyself', {
+                        initialValue: this.state.aboutMyself,
                         rules: [{ required: true, message: '我们非常想了解一个出色的你!', whitespace: true }],
                     })(
                         <TextArea autosize={{ minRows: 6 }} />
@@ -897,7 +912,7 @@ class stepSix extends Component {
 const StepSix = Form.create()(stepSix);
 
 
-{/*        
+{/* 
                                  
     step7: 作品展示
 
@@ -906,16 +921,70 @@ class stepSeven extends Component {
     constructor() {
         super();
         this.state = {
+            filename: '',
+            token: '',
+            url: ''
         }
         this.goback = this.goback.bind(this);
+    }
+
+    handleSubmit() {
+        let values = {
+            _id: '',
+            aboutMyself: '',
+            birthday: '',
+            city: '',
+            collage: '',
+            degree: '',
+            email: '',
+            goodResult: '',
+            graduation: '',
+            headImageUrl: '',
+            hightDegree: '',
+            job: '',
+            jobState: '',
+            name: '',
+            phone: '',
+            prefix: '',
+            profess: '',
+            projectExperience: '',
+            salary: '',
+            sex: '',
+            website: '',
+            workExperience: '',
+            worktime: ''
+        };
+        for (var item in values) {
+            values[item] = sessionStorage.getItem(item);
+        }
+        fetch('http://localhost:3111/upload/upresume', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(values)
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data && data.status != 0) {
+                    message.error(data.msg);
+                } else {
+                    message.success(data.msg);
+                }
+            }, (err) => {
+                message.error(err);
+            });
     }
     goback() {
         this.props.changeStep(6);
     }
     componentWillMount() {
-        fetch('http://localhost:3111/upload/gettoken')
+        // 从服务器获取上传凭证
+        fetch('http://localhost:3111/upload/gettoken?bucket=productionimage', { method: 'GET' })
             .then((response) => response.json())
-            .then((data) => { }, (err) => { })
+            .then((data) => {
+                if (data.status === 0) {
+                    this.setState({ token: data.token });
+                }
+            }, (err) => { console.error(err) })
     }
     render() {
         const formItemLayout = {
@@ -928,22 +997,33 @@ class stepSeven extends Component {
                 sm: { span: 10 },
             },
         };
+        const _this = this;
         const props = {
             name: 'file',
-            action: 'http://p5eq9w66k.bkt.clouddn.com/bingguo.jpg',
-            headers: {
-                authorization: 'authorization-text',
+            action: 'https://upload-z2.qiniup.com',
+            beforeUpload(file) {
+                const isJPG = file.type === 'image/jpeg';
+                if (!isJPG) {
+                    message.error('只支持上传jpg格式的图片!');
+                }
+                const isLt2M = file.size / 1024 / 1024 < 2;
+                if (!isLt2M) {
+                    message.error('上传图片需要小于 2MB!');
+                }
+                if (isJPG && isLt2M) {
+                    _this.setState({ filename: file.name });
+                }
+                return isJPG && isLt2M;
             },
+            data: { token: this.state.token, key: this.state.filename + sessionStorage.getItem('phone') + new Date().getTime() },
             onChange(info) {
-                if (info.file.status !== 'uploading') {
-                    console.log(info.file, info.fileList);
-                }
                 if (info.file.status === 'done') {
-                    message.success(`${info.file.name} 文件上传成功!`);
-                } else if (info.file.status === 'error') {
-                    message.error(`${info.file.name}  文件上传失败!`);
+                    let url = _this.state.url;
+                    url = url + '#@@&@!(' + 'http://p6gbuepv2.bkt.clouddn.com/' + info.file.response.key;
+                    _this.setState({ url: url });
+                    sessionStorage.setItem('goodResult', url);
                 }
-            },
+            }
         };
         return (
             <Form onSubmit={this.handleSubmit}>
@@ -964,7 +1044,7 @@ class stepSeven extends Component {
                     }}
                 >
                     <Button onClick={this.goback}>上一步</Button>&nbsp;&nbsp;&nbsp;&nbsp;
-                            <Button type="primary" htmlType="submit">提交</Button>
+                            <Button type="primary" htmlType="submit">提交简历</Button>
                 </FormItem>
             </Form>
         )
@@ -977,37 +1057,82 @@ class Resume extends Component {
     constructor() {
         super();
         this.state = {
-            step: 7
+            visible: false,
+            step: 1
         }
+        this.showModal = this.showModal.bind(this);
+        this.handleOk = this.handleOk.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
     }
     changeStep(step) {
         this.setState({ step: step });
+    }
+    // 控制上传头像的模态框
+    showModal() {
+        this.setState({ visible: true });
+    }
+    handleOk(e) {
+        this.setState({ visible: false });
+    }
+    handleCancel(e) {
+        this.setState({ visible: false });
+    }
+    // 写入时间戳
+    componentDidMount() {
+        let _id = sessionStorage.getItem('_id');
+        if (!_id) {
+            sessionStorage.setItem('_id', new Date().getTime());
+        }
     }
     render() {
         return (
             <div>
                 <div className="resumePage">
                     <div className="topImg"></div>
-                    <div className="headImg"></div>
+                    <div className="headImg" style={
+                        sessionStorage.getItem('headImageUrl') ? { backgroundImage: 'url(' + sessionStorage.getItem('headImageUrl') + '-jvzhong?v=' + new Date().getTime() + ')' }
+                            : { backgroundImage: "url('http://p6g8b7pfx.bkt.clouddn.com/head$%23&%25%25%2319960906.jpg')" }
+                    } onClick={this.showModal} ></div>
                     <h2 className="resumeTitle">{
-                        this.state.step === 1 ? '基本信息' :
-                            this.state.step === 2 ? '教育经历' :
-                                this.state.step === 3 ? '期望工作' :
-                                    this.state.step === 4 ? '工作经历' :
-                                        this.state.step === 5 ? '项目经验' :
-                                            this.state.step === 6 ? '自我描述' :
-                                                this.state.step === 7 ? '作品展示' : null
+                        (() => {
+                            switch (this.state.step) {
+                                case 1: return "基本信息";
+                                case 2: return "教育经历";
+                                case 3: return '期望工作';
+                                case 4: return "工作经历";
+                                case 5: return "项目经验";
+                                case 6: return '自我描述';
+                                case 7: return "作品展示";
+                                default: return null;
+                            }
+                        })()
                     }</h2>
                     {
-                        this.state.step === 1 ? <StepOne changeStep={this.changeStep.bind(this)} /> :
-                            this.state.step === 2 ? <StepTwo changeStep={this.changeStep.bind(this)} /> :
-                                this.state.step === 3 ? <StepThree changeStep={this.changeStep.bind(this)} /> :
-                                    this.state.step === 4 ? <StepFour changeStep={this.changeStep.bind(this)} /> :
-                                        this.state.step === 5 ? <StepFive changeStep={this.changeStep.bind(this)} /> :
-                                            this.state.step === 6 ? <StepSix changeStep={this.changeStep.bind(this)} /> :
-                                                this.state.step === 7 ? <StepSeven changeStep={this.changeStep.bind(this)} /> : null
+                        (() => {
+                            switch (this.state.step) {
+                                case 1: return <StepOne changeStep={this.changeStep.bind(this)} />;
+                                case 2: return <StepTwo changeStep={this.changeStep.bind(this)} />;
+                                case 3: return <StepThree changeStep={this.changeStep.bind(this)} />;
+                                case 4: return <StepFour changeStep={this.changeStep.bind(this)} />;
+                                case 5: return <StepFive changeStep={this.changeStep.bind(this)} />;
+                                case 6: return <StepSix changeStep={this.changeStep.bind(this)} />;
+                                case 7: return <StepSeven changeStep={this.changeStep.bind(this)} />;
+                                default: return null;
+                            }
+                        })()
                     }
                 </div>
+                <Modal title="上传照片"
+                    okText="上传"
+                    cancelText="取消"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                >
+                    <div className="uploadImage">
+                        <MakeUpload _id={sessionStorage.getItem('_id')} headType="jobFinder" />
+                    </div>
+                </Modal>
             </div>
         )
     }

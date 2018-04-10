@@ -20,7 +20,7 @@ const columnsStatistical = [
         dataIndex: 'leave'
     },
     {
-        title: '缺勤次数',
+        title: '矿工次数',
         dataIndex: 'absenteeism'
     }
 ]
@@ -42,7 +42,7 @@ export default class Attendance extends Component {
             endtime: '',
             dataContent: []
         };
-        this.columnsContent = [{ title: '日期', dataIndex: 'date', }, { title: '上班打卡时间', dataIndex: 'work', }, { title: '下班打卡时间', dataIndex: 'afterwork', }, { title: '状态', dataIndex: 'state' }];
+        this.columnsContent = [{ title: '日期', dataIndex: 'date', }, { title: '上班打卡时间', dataIndex: 'starttime', }, { title: '下班打卡时间', dataIndex: 'endtime', }, { title: '状态', dataIndex: 'state' }];
         this.handleStartTime = this.handleStartTime.bind(this);
         this.handleEndTime = this.handleEndTime.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -87,7 +87,6 @@ export default class Attendance extends Component {
             message.error('结束时间小于开始时间!');
             return;
         }
-        console.log(this.mergeUrl('http://localhost', { username: 'shujian', password: '555' }));
         fetch(this.mergeUrl('http://localhost:3111/search/clockinrecord', { starttime: this.state.starttime, endtime: this.state.endtime }), {
             method: 'GET',
             credentials: 'include'
@@ -98,9 +97,10 @@ export default class Attendance extends Component {
                     let dataContent = [];
                     data.content.forEach(function (value, index) {
                         dataContent.push({ key: index });
-                        dataContent[index]["work"] = value.starttime;
-                        dataContent[index]["afterwork"] = value.endtime;
-                        dataContent[index]["date"] = moment(value.date).format("YYYY-MM-D");
+                        dataContent[index]["starttime"] = value.starttime;
+                        dataContent[index]["endtime"] = value.endtime;
+                        dataContent[index]["date"] = moment(value.date).format("YYYY-MM-DD");
+                        dataContent[index]["state"] = value.state;
                     });
                     this.setState({ dataContent });
                 } else {

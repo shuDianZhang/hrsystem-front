@@ -11,6 +11,7 @@ import Attendance from './components/attendance'
 import Aducation from './components/aducation'
 import SendResume from './pages/sendresume'
 import RewardAndPunishRecord from './components/rewardAndPunishRecord'
+import Interview from './components/interviewInfo'
 
 export default () => (
     <Router history={hashHistory}>
@@ -24,6 +25,7 @@ export default () => (
             <Route path="attendance" component={Attendance} />
             <Route path="aducation" component={Aducation} />
             <Route path="record" component={RewardAndPunishRecord} />
+            <Route path="interview" component={Interview} />
         </Route>
         <Route path="sendresume" component={SendResume}></Route>
     </Router>

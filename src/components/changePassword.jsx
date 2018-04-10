@@ -73,9 +73,7 @@ export default class changePassword extends Component {
             fetch('http://localhost:3111/user/changepassword', {
                 method: 'POST',
                 credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     password: this.state.input_1,
                     password_c: this.state.input_3

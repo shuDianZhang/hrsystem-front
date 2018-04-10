@@ -19,7 +19,6 @@
     left: calc(50% - 65px);
     border-radius: 50%;
     border: 5px solid #ffffff;
-    background-image: url('../img/head.jpg'); 
     background-size: contain;
 }
 .resumeTitle {

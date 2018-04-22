@@ -1,20 +1,36 @@
 import React, { Component } from 'react';
-import { DatePicker, Table, Button } from 'antd';
+import { DatePicker, Table, Button, Popover } from 'antd';
 import './css/payment.css';
 
 export default class Payment extends Component {
     constructor() {
         super();
         this.state = {
-            dataContent: []
+            dataContent: [{
+                'time': '2019/1/2',
+                'baseSalary': '5600',
+                'serviceSalary': '1000',
+                'overtimeSalary': '1111',
+            }]
         }
+        this.content =  (
+            <div>
+              <p>Content</p>
+              <p>Content</p>
+            </div>
+          );
         this.columnsContent = [
             { title: '时间', dataIndex: 'time' },
             { title: '基本工资（元）', dataIndex: 'baseSalary' },
-            { title: '服务津贴（元）', dataIndex: 'serviceSalary' },
-            { title: '奖励金额（元）', dataIndex: 'rewardSalary' },
+            { title: '服务津贴（元）', key: 'serviceSalary',
+              render: (text, record, index) => (
+                <Popover content={this.content} title="Title" trigger="hover">
+                    5555
+                </Popover>
+              )},
             { title: '加班工资（元）', dataIndex: 'overtimeSalary' },
-            { title: '惩罚扣款金额（元）', dataIndex: 'punishMoney' },
+            { title: '奖励金额（元）', dataIndex: 'rewardSalary' },
+            { title: '扣款金额（元）', dataIndex: 'punishMoney' },
             { title: '应发工资（元）', dataIndex: 'shouldPay' },
             { title: '实发工资（元）', dataIndex: 'actualPay' }
         ];

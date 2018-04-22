@@ -1,11 +1,13 @@
-.infoShow {
-    width: 110px;
+.infoShow, .long, .job {
     height: 25px;
     display: inline-block;
     border: 1px solid #EBEDF0;
     border-radius: 4px;
     padding-left: 5px;
     margin-bottom: 10px;
+}
+.infoShow {
+    width: 110px;
 }
 .middle {
     width: 155px;

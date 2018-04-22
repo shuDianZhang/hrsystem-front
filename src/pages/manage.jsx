@@ -134,7 +134,7 @@ export default class Manage extends Component {
                             <Menu.Item key="2"><Link to="/manage/employeeinfo">查询个人信息</Link></Menu.Item>
                             {
                                 this.state.accountType === 1 ?
-                                    null : <Menu.Item key="3">查看职员信息</Menu.Item>
+                                    null : <Menu.Item key="3"><Link to="/manage/employeeInfoList">查看职员信息</Link></Menu.Item>
                             }
                         </SubMenu>
                         <SubMenu
@@ -144,7 +144,7 @@ export default class Manage extends Component {
                             <Menu.Item key="4"><Link to="/manage/changepassword">修改密码</Link></Menu.Item>
                             {
                                 this.state.accountType === 1 ?
-                                    null : (<Menu.Item key="11">职员账户管理</Menu.Item>)
+                                    null : (<Menu.Item key="11"><Link to="/manage/accountManage">职员账户管理</Link></Menu.Item>)
                             }
                         </SubMenu>
                         {
@@ -168,12 +168,22 @@ export default class Manage extends Component {
                                 <span>奖惩信息</span>
                             </Link>
                         </Menu.Item>
-                        <Menu.Item key="7">
-                            <Link to="/manage/payment">
-                                <Icon type="pay-circle-o" />
-                                <span>薪酬结算</span>
-                            </Link>
-                        </Menu.Item>
+                        {
+                            this.state.accountType === 1 ?
+                                <Menu.Item key="7">
+                                    <Link to="/manage/payment">
+                                        <Icon type="pay-circle-o" />
+                                        <span>薪酬结算</span>
+                                    </Link>
+                                </Menu.Item> :
+                                <SubMenu
+                                    key="sub4"
+                                    title={<span><Icon type="pay-circle-o" /><span>薪酬管理</span></span>}
+                                >
+                                    <Menu.Item key="10"><Link to="/manage/paymentManage">员工薪酬管理</Link></Menu.Item>
+                                    <Menu.Item key="11"><Link to="/manage/payment">个人薪酬结算</Link></Menu.Item>
+                                </SubMenu>
+                        }
                         <Menu.Item key="8">
                             <Link to="/manage/attendance">
                                 <Icon type="flag" />

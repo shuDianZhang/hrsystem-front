@@ -35,7 +35,7 @@ export default class EmployeeInfo extends Component {
                 <span className="infoTag">身份证号：</span><div className="infoShow middle">{this.state.content.idnumber}</div><br />
                 <span className="infoTag">出生日期：</span><div className="infoShow">{this.state.content.borndate}</div><br />
                 <span className="infoTag">婚姻状况：</span><div className="infoShow">{this.state.content.marriage}</div><br />
-                <span className="infoTag">户籍所在地：</span><div className="infoShow long">{this.state.content.home}</div><br />
+                <span className="infoTag">户籍所在地：</span><div className="long">{this.state.content.home}</div><br />
                 <span className="infoTag">联系电话：</span><div className="infoShow">{this.state.content.phone}</div><br />
                 <span className="infoTag">工作邮箱：</span><div className="infoShow middle">{this.state.content.email}</div><br />
                 <h2>毕业院校</h2>
@@ -43,8 +43,8 @@ export default class EmployeeInfo extends Component {
                 <span className="infoTag">毕业院校：</span><div className="infoShow">{this.state.content.collage}</div><br />
                 <span className="infoTag">毕业时间：</span><div className="infoShow">{this.state.content.graduation}</div><br />
                 <h2>职位信息：</h2>
-                <span className="infoTag">所属部门：</span><div className="infoShow job">{this.state.content.dept}</div><br />
-                <span className="infoTag">职位：</span><div className="infoShow job">{this.state.content.job}</div><br />
+                <span className="infoTag">所属部门：</span><div className="job">{this.state.content.dept}</div><br />
+                <span className="infoTag">职位：</span><div className="job">{this.state.content.job}</div><br />
                 <span className="infoTag">所获荣誉：</span>
                 <Timeline className="reward">
                     {

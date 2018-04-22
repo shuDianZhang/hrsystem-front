@@ -5,13 +5,16 @@ import Manage from './pages/manage';
 import Clockin from './components/clockIn';
 import Employeeinfo from './components/employeeInfo';
 import Changepassword from './components/changePassword';
-import Payment from './components/payment'
-import Holiday from './components/holiday'
-import Attendance from './components/attendance'
-import Aducation from './components/aducation'
-import SendResume from './pages/sendresume'
-import RewardAndPunishRecord from './components/rewardAndPunishRecord'
-import Interview from './components/interviewInfo'
+import Payment from './components/payment';
+import Holiday from './components/holiday';
+import Attendance from './components/attendance';
+import Aducation from './components/aducation';
+import SendResume from './pages/sendresume';
+import RewardAndPunishRecord from './components/rewardAndPunishRecord';
+import Interview from './components/interviewInfo';
+import PaymentManage from './components/paymentManage';
+import AccountManage from './components/accoutManage';
+import EmployeeInfoList from './components/employeeInfoList'
 
 export default () => (
     <Router history={hashHistory}>
@@ -26,6 +29,9 @@ export default () => (
             <Route path="aducation" component={Aducation} />
             <Route path="record" component={RewardAndPunishRecord} />
             <Route path="interview" component={Interview} />
+            <Route path="paymentManage" component={PaymentManage} />
+            <Route path="accountManage" component={AccountManage} />
+            <Route path="employeeInfoList" component={EmployeeInfoList}></Route>
         </Route>
         <Route path="sendresume" component={SendResume}></Route>
     </Router>

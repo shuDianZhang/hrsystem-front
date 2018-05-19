@@ -4,12 +4,8 @@ import { DatePicker, Button, Table, message } from 'antd';
 
 const columnsStatistical = [
     {
-        title: '职工编号',
+        title: '用户名',
         dataIndex: 'id'
-    },
-    {
-        title: '姓名',
-        dataIndex: 'name'
     },
     {
         title: '迟到次数',
@@ -28,7 +24,6 @@ const dataStatistical = [
     {
         key: '1',
         id: '19960906',
-        name: '舒健',
         late: '5',
         leave: '7',
         absenteeism: '2'
@@ -40,7 +35,8 @@ export default class Attendance extends Component {
         this.state = {
             starttime: '',
             endtime: '',
-            dataContent: []
+            dataContent: [],
+            dataStatistical: []
         };
         this.columnsContent = [{ title: '日期', dataIndex: 'date', }, { title: '上班打卡时间', dataIndex: 'starttime', }, { title: '下班打卡时间', dataIndex: 'endtime', }, { title: '状态', dataIndex: 'state' }];
         this.handleStartTime = this.handleStartTime.bind(this);
@@ -95,6 +91,15 @@ export default class Attendance extends Component {
             .then((data) => {
                 if (data.status === 0) {
                     let dataContent = [];
+                    let account = [];
+                    if (data.content && data.account) {
+                        let accountObject = {};
+                        accountObject["id"] = data.content[0]["username"];
+                        accountObject["late"] = data.account["chidao"];
+                        accountObject["leave"] = data.account["zaotui"];
+                        accountObject["absenteeism"] = data.account["kuanggong"];
+                        account.push(accountObject);
+                    }
                     data.content.forEach(function (value, index) {
                         dataContent.push({ key: index });
                         dataContent[index]["starttime"] = value.starttime;
@@ -102,7 +107,7 @@ export default class Attendance extends Component {
                         dataContent[index]["date"] = moment(value.date).format("YYYY-MM-DD");
                         dataContent[index]["state"] = value.state;
                     });
-                    this.setState({ dataContent });
+                    this.setState({ dataContent, dataStatistical: account });
                 } else {
                     message.warn(data.msg);
                 }
@@ -122,7 +127,7 @@ export default class Attendance extends Component {
                     <Table columns={this.columnsContent} dataSource={this.state.dataContent} size="small" pagination={{ pageSize: 5 }} />
                 </div>
                 <h2>考勤情况统计：</h2>
-                <Table columns={columnsStatistical} dataSource={dataStatistical} size="small" pagination={{ hideOnSinglePage: true }} />
+                <Table columns={columnsStatistical} dataSource={this.state.dataStatistical} size="small" pagination={{ hideOnSinglePage: true }} />
             </div>
         )
     }

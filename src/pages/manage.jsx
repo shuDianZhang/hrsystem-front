@@ -162,12 +162,16 @@ export default class Manage extends Component {
                                 <span>培训信息</span>
                             </Link>
                         </Menu.Item>
-                        <Menu.Item key="6">
-                            <Link to="/manage/record">
-                                <Icon type="line-chart" />
-                                <span>奖惩信息</span>
-                            </Link>
-                        </Menu.Item>
+                        <SubMenu
+                            key="sub4"
+                            title={<span><Icon type="usergroup-add" /><span>奖惩信息</span></span>}
+                        >
+                            {
+                                this.state.accountType === 2 ?
+                                    (<Menu.Item key="14"><Link to="/manage/workRecord">管理奖罚信息</Link></Menu.Item>) : null
+                            }
+                            <Menu.Item key="15"><Link to="/manage/record">个人奖惩信息</Link></Menu.Item>
+                        </SubMenu>
                         {
                             this.state.accountType === 1 ?
                                 <Menu.Item key="7">
@@ -177,11 +181,11 @@ export default class Manage extends Component {
                                     </Link>
                                 </Menu.Item> :
                                 <SubMenu
-                                    key="sub4"
+                                    key="sub5"
                                     title={<span><Icon type="pay-circle-o" /><span>薪酬管理</span></span>}
                                 >
                                     <Menu.Item key="10"><Link to="/manage/paymentManage">员工薪酬管理</Link></Menu.Item>
-                                    <Menu.Item key="11"><Link to="/manage/payment">个人薪酬结算</Link></Menu.Item>
+                                    <Menu.Item key="13"><Link to="/manage/payment">个人薪酬结算</Link></Menu.Item>
                                 </SubMenu>
                         }
                         <Menu.Item key="8">

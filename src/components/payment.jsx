@@ -10,7 +10,11 @@ export default class Payment extends Component {
                 'time': '2019/1/2',
                 'baseSalary': '5600',
                 'serviceSalary': '1000',
-                'overtimeSalary': '1111',
+                'overtimeSalary': '700',
+                'rewardSalary': '1200',
+                'punishMoney': '0',
+                'shouldPay': '8500',
+                'actualPay': '8500'
             }]
         }
         this.content =  (
@@ -25,7 +29,7 @@ export default class Payment extends Component {
             { title: '服务津贴（元）', key: 'serviceSalary',
               render: (text, record, index) => (
                 <Popover content={this.content} title="Title" trigger="hover">
-                    5555
+                    1000
                 </Popover>
               )},
             { title: '加班工资（元）', dataIndex: 'overtimeSalary' },

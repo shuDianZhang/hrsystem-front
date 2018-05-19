@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Menu, Breadcrumb, Icon, Avatar, message, Modal } from 'antd';
+import { Layout, Menu, Breadcrumb, Icon, Avatar, message, Modal, Badge, notification } from 'antd';
 import { Link, hashHistory } from 'react-router'
 
 import Upload from '../components/uploadImage'
@@ -8,6 +8,12 @@ import '../assets/css/manage.css'
 
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
+const openNotification = () => {
+    notification.open({
+        message: 'Notification Title',
+        description: 'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+    });
+};
 
 export default class Manage extends Component {
     constructor() {
@@ -18,7 +24,8 @@ export default class Manage extends Component {
             isLogin: false,
             collapsed: false,
             visible: false,
-            topMenuInfo: {}
+            topMenuInfo: {},
+            message: 10
         };
         this.onCollapse = this.onCollapse.bind(this);
         this.showModal = this.showModal.bind(this);
@@ -34,7 +41,7 @@ export default class Manage extends Component {
         let hashTag = {
             '#/manage': 1, '#/manage/employeeinfo': 2, '#/manage/changepassword': 4,
             '#/manage/aducation': 5, '#/manage/record': 6, '#/manage/payment': 7,
-            '#/manage/attendance': 8, '#/manage/holiday': 9
+            '#/manage/attendance': 8, '#/manage/holiday': 9, '#/manage/holidaylist': 16
         };
         let getHash = window.location.hash;
         for (var item in hashTag) {
@@ -65,7 +72,7 @@ export default class Manage extends Component {
                     message.error('请先登录!');
                     hashHistory.push('/');
                 } else {
-                    this.setState({ topMenuInfo: data.content });
+                    this.setState({ topMenuInfo: data.content, message: data.content.message });
                 }
             }, (err) => {
                 message.error(err);
@@ -108,6 +115,9 @@ export default class Manage extends Component {
     }
     handleCancel(e) {
         this.setState({ visible: false });
+    }
+    showMessage() {
+        hashHistory.push('/message');
     }
     render() {
         return (
@@ -194,17 +204,21 @@ export default class Manage extends Component {
                                 <span>职工出勤</span>
                             </Link>
                         </Menu.Item>
-                        <Menu.Item key="9">
-                            <Link to="/manage/holiday">
-                                <Icon type="coffee" />
-                                <span>请假</span>
-                            </Link>
-                        </Menu.Item>
+                        <SubMenu
+                            key="sub6"
+                            title={<span><Icon type="coffee" /><span>请假管理</span></span>}
+                        >
+                            <Menu.Item key="9"><Link to="/manage/holiday">请假</Link></Menu.Item>
+                            <Menu.Item key="16"><Link to="/manage/holidaylist">请假列表</Link></Menu.Item>
+                        </SubMenu>
                     </Menu>
                 </Sider>
                 <Layout>
                     <Header style={{ background: '#fff', padding: 0, height: 50 }}>
                         <div className="sectionRight">
+                            <Badge className="message" onClick={this.showMessage} count={this.state.message}>
+                                <Icon type="message" style={{ fontSize: 22 }} />
+                            </Badge>
                             <Avatar className="userIcon" onClick={this.showModal} size="large" icon="user" src={this.state.topMenuInfo.hasHeadImg ? `http://p6g8b7pfx.bkt.clouddn.com/headIcon${this.state.topMenuInfo._id}.jpg-jvzhong?v=${new Date().getTime()}` : "http://p6g8b7pfx.bkt.clouddn.com/head$%23&%25%25%2319960906.jpg"} />
                             <span className="user">{this.state.topMenuInfo.name}</span><span className="separat">|</span><span onClick={this.logout} className="logout">退出</span>
                         </div>

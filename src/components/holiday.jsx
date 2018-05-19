@@ -25,10 +25,36 @@ class Holiday extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleSubmit(e) {
+        let that = this;
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
+            let holidayInfo = values;
+            let imgUrlArr = [];
+            let imgList = values['uploadImg']['fileList'];
+            for (let item of imgList) {
+                imgUrlArr.push(`http://p6nnw8359.bkt.clouddn.com/${item.response.key}`);
+            }
+            delete holidayInfo['uploadImg'];
+            holidayInfo['approvePeople'] = that.state.leaderInfo._id;
+            holidayInfo['imageUrl'] = imgUrlArr;
+            holidayInfo['ifApprove'] = false;
+            console.log(holidayInfo);
             if (!err) {
-                console.log(values);
+                fetch('http://localhost:3111/upload/holiady', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(holidayInfo)
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.status === 0) {
+                            message.success(data.msg);
+                            hashHistory.push('/manage/holidaylist');
+                        } else {
+                            message.error(data.msg);
+                        }
+                    }, (err) => { message.error(err) })
             }
         });
     }

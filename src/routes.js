@@ -16,6 +16,8 @@ import PaymentManage from './components/paymentManage';
 import AccountManage from './components/accoutManage';
 import EmployeeInfoList from './components/employeeInfoList'
 import workRecord from './components/workRecord'
+import holidayList from './components/holidayList'
+import message from './pages/message';
 
 export default () => (
     <Router history={hashHistory}>
@@ -34,7 +36,9 @@ export default () => (
             <Route path="accountManage" component={AccountManage} />
             <Route path="employeeInfoList" component={EmployeeInfoList}></Route>
             <Route path="workRecord" component={workRecord}></Route>
+            <Route path="holidaylist" component={holidayList}></Route>
         </Route>
         <Route path="sendresume" component={SendResume}></Route>
+        <Route path="message" component={message}></Route>
     </Router>
 )

@@ -33,3 +33,9 @@
 .uploadImage {
   margin: 50px 0 50px 180px;
 }
+.message {
+  position: absolute;
+  left: -100px;
+  top: 17px;
+  cursor: pointer;
+}

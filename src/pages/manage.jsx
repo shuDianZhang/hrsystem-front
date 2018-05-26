@@ -25,7 +25,7 @@ export default class Manage extends Component {
             collapsed: false,
             visible: false,
             topMenuInfo: {},
-            message: 10
+            message: 0
         };
         this.onCollapse = this.onCollapse.bind(this);
         this.showModal = this.showModal.bind(this);
@@ -39,9 +39,11 @@ export default class Manage extends Component {
     // 根据URL初始化menu选中的Item
     selectItemMethod() {
         let hashTag = {
-            '#/manage': 1, '#/manage/employeeinfo': 2, '#/manage/changepassword': 4,
+            '#/manage': 1, '#/manage/employeeinfo': 2, '#/manage/employeeInfoList': 3, '#/manage/changepassword': 4,
             '#/manage/aducation': 5, '#/manage/record': 6, '#/manage/payment': 7,
-            '#/manage/attendance': 8, '#/manage/holiday': 9, '#/manage/holidaylist': 16
+            '#/manage/attendance': 8, '#/manage/holiday': 9, "#/manage/paymentManage": 10, "#/manage/accountManage": 11,
+            "#/manage/interview": 12, "#/manage/payment": 13, '#/manage/workRecord': 14, '/manage/record': 15,
+            '#/manage/holidaylist': 16
         };
         let getHash = window.location.hash;
         for (var item in hashTag) {
@@ -166,12 +168,6 @@ export default class Manage extends Component {
                                     <Menu.Item key="12"><Link to="/manage/interview">邀请面试</Link></Menu.Item>
                                 </SubMenu> : null
                         }
-                        <Menu.Item key="5">
-                            <Link to="/manage/aducation">
-                                <Icon type="bulb" />
-                                <span>培训信息</span>
-                            </Link>
-                        </Menu.Item>
                         <SubMenu
                             key="sub4"
                             title={<span><Icon type="usergroup-add" /><span>奖惩信息</span></span>}

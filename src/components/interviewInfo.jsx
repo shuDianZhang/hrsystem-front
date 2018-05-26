@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
-import { Divider, Modal, Table, Button, Icon, message, Input } from 'antd';
+import { Form, Divider, Modal, Table, Button, Icon, message, Input, Select, DatePicker } from 'antd';
 import moment from 'moment';
 
 import './css/interviewInfo.css'
 
+const FormItem = Form.Item;
 const { TextArea } = Input;
 
-export default class Payment extends Component {
+class interviewInfo extends Component {
     constructor() {
         super();
         this.state = {
             visible: false,
+            interviewVisible: false,
             dataContent: [],
+            interviewInfo: null,
             resumeDetail: {
                 workExperience: [],
                 projectExperience: []
@@ -41,29 +44,18 @@ export default class Payment extends Component {
                 ),
             }
         ]
+
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.handleCancelInterview = this.handleCancelInterview.bind(this);
     }
     interview(info) {
-        fetch("http://localhost:3111/send/email",
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ type: 'interview', name: info.name })
-            }
-        ).then((response) => response.json())
-            .then((data) => {
-                if (data.status === 0) {
-                    message.success('面试邀请邮件发送成功!');
-                    return;
-                }
-                message.error(data.msg);
-            }, (err) => { console.error(err) })
+        this.setState({ interviewInfo: info, interviewVisible: true });
     }
     onDelete(index, info) {
         let arr = this.state.dataContent;
         arr.splice(index, 1);
-        fetch("http://localhost:3111/send/email",
+        fetch("http://localhost:3111/send/email-fail",
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -80,12 +72,41 @@ export default class Payment extends Component {
                 message.error(data.msg);
             }, (err) => { console.error(err) })
     }
+    handleSubmit(e) {
+        let that = this;
+        e.preventDefault();
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            let interviewInfo = values;
+            let interviewee = that.state.interviewInfo;
+            for (let item in interviewee) {
+                interviewInfo[item] = interviewee[item];
+            }
+            if (!err) {
+                console.log(values);
+                fetch("http://localhost:3111/send/email-interview",
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                        body: JSON.stringify({ interviewInfo })
+                    }
+                ).then((response) => response.json(interviewInfo))
+                    .then((data) => {
+                        if (data.status === 0) {
+                            this.setState({ interviewVisible: false });
+                            message.success('面试邀请邮件发送成功!');
+                            return;
+                        }
+                        message.error(data.msg);
+                    }, (err) => { console.error(err) })
+            }
+        });
+    }
     showDetail(info) {
         fetch(`http://localhost:3111/search/detailResume?name=${info.name}`, { method: 'GET', credentials: 'include' })
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 0) {
-                    console.log(data.resumeDetail);
                     this.setState({ resumeDetail: data.resumeDetail });
                 } else {
                     message.error(data.msg);
@@ -95,6 +116,9 @@ export default class Payment extends Component {
     }
     handleCancel() {
         this.setState({ visible: false });
+    }
+    handleCancelInterview() {
+        this.setState({ interviewVisible: false });
     }
     componentWillMount() {
         fetch("http://localhost:3111/search/getResume", { method: 'GET', credentials: 'include' })
@@ -108,6 +132,7 @@ export default class Payment extends Component {
             }, (err) => { console.error(err) })
     }
     render() {
+        const { getFieldDecorator } = this.props.form;
         return (
             <div>
                 <h2>简历列表：</h2>
@@ -125,6 +150,9 @@ export default class Payment extends Component {
                     >
                         <div className="container">
                             <h2>基本信息：</h2>
+                            <div className="headImageContainer">
+                                <img className="headImage" src={this.state.resumeDetail.headImageUrl} alt="应聘者头像" />
+                            </div>
                             <span className="infoTag">姓名：</span><div className="infoShow">{this.state.resumeDetail.name}</div><br />
                             <span className="infoTag">性别：</span><div className="infoShow">{this.state.resumeDetail.sex}</div><br />
                             <span className="infoTag">出生日期：</span><div className="infoShow">{moment(this.state.resumeDetail.birthday).format('YYYY-MM-DD')}</div><br />
@@ -133,7 +161,7 @@ export default class Payment extends Component {
                             <span className="infoTag">手机号码：</span><div className="infoShow middle">{'+' + this.state.resumeDetail.prefix + '  ' + this.state.resumeDetail.phone}</div><br />
                             <span className="infoTag">email：</span><div className="infoShow little-long">{this.state.resumeDetail.email}</div><br />
                             <span className="infoTag">社交主页地址：</span><div className="infoShow little-long">{this.state.resumeDetail.website}</div><br /><br /><br />
-                            <h2>基本信息：</h2>
+                            <h2>教育经历：</h2>
                             <span className="infoTag">学校名称：</span><div className="infoShow">{this.state.resumeDetail.collage}</div><br />
                             <span className="infoTag">所学专业：</span><div className="infoShow">{this.state.resumeDetail.profess}</div><br />
                             <span className="infoTag">学历：</span><div className="infoShow">{this.state.resumeDetail.degree}</div><br />
@@ -177,10 +205,68 @@ export default class Payment extends Component {
                             <div className="textAreaContainer">
                                 <span className="infoTag">自我描述：</span><div className="textArea">{this.state.resumeDetail.aboutMyself}</div><br />
                             </div>
+                            <br /><br />
+                            <h2>作品展示：</h2>
+                            <div className="showGoodResult">
+                                <img className="goodResult" src={this.state.resumeDetail.goodResult} alt="作品展示" />
+                            </div>
                         </div>
+                    </Modal>
+                </div>
+                <div>
+                    <Modal width={800}
+                        title="面试邀请"
+                        visible={this.state.interviewVisible}
+                        onCancel={this.handleCancelInterview}
+                        footer={null}>
+                        <Form style={{ width: 600 }} onSubmit={this.handleSubmit}>
+                            <FormItem
+                                label="面试地点"
+                                labelCol={{ span: 9 }}
+                                wrapperCol={{ span: 12 }}
+                            >
+                                {getFieldDecorator('place', {
+                                    rules: [{ required: true, message: '请输入面试地点!', whitespace: true }],
+                                })(
+                                    <Input />
+                                )}
+                            </FormItem>
+                            <FormItem
+                                label="面试时间"
+                                labelCol={{ span: 9 }}
+                                wrapperCol={{ span: 8 }}
+                            >
+                                {getFieldDecorator('time')(
+                                    <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" placeholder="面试时间" />
+                                )}
+                            </FormItem>
+                            <FormItem
+                                label="面试官"
+                                labelCol={{ span: 9 }}
+                                wrapperCol={{ span: 4 }}
+                            >
+                                {getFieldDecorator('interviewer', {
+                                    rules: [{ required: true, message: '请选择面试官!', whitespace: true }],
+                                })(
+                                    <Select>
+                                        <Option value="506975676@qq.com">舒健</Option>
+                                    </Select>
+                                )}
+                            </FormItem>
+                            <FormItem
+                                wrapperCol={{
+                                    xs: { span: 24, offset: 0 },
+                                    sm: { span: 16, offset: 9 },
+                                }}
+                            >
+                                <Button type="primary" htmlType="submit">邀请面试</Button>
+                            </FormItem>
+                        </Form>
                     </Modal>
                 </div>
             </div>
         )
     }
 }
+
+export default interviewInfo = Form.create()(interviewInfo);

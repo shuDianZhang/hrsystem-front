@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Tooltip, Icon, Select, Row, Col, Button, AutoComplete, DatePicker, Upload, message, Modal } from 'antd';
+import { Form, Input, Tooltip, Icon, Select, Row, Col, Button, AutoComplete, DatePicker, Upload, message, Modal, Timeline } from 'antd';
 import moment from 'moment'
 
 import MakeUpload from '../components/uploadImage'
@@ -98,7 +98,7 @@ class stepOne extends Component {
                 <Option value="86">+86</Option>
                 <Option value="87">+87</Option>
             </Select>
-            );
+        );
 
         const websiteOptions = autoCompleteResult.map(website => (
             <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
@@ -114,7 +114,7 @@ class stepOne extends Component {
                         rules: [{ required: true, message: '请告诉我们你的尊姓大名!', whitespace: true }],
                     })(
                         <Input />
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     label="性别"
@@ -129,7 +129,7 @@ class stepOne extends Component {
                             <Option value="男">男</Option>
                             <Option value="女">女</Option>
                         </Select>
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     {...formItemLayout}
@@ -140,7 +140,7 @@ class stepOne extends Component {
                         rules: [{ required: true, message: '告诉我们你的生日!当天有惊喜福利!' }],
                     })(
                         <DatePicker onChange={this.onChangeBirthday} />
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     label="最高学历"
@@ -158,7 +158,7 @@ class stepOne extends Component {
                             <Option value="博士">博士</Option>
                             <Option value="其他">其他</Option>
                         </Select>
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     label="工作年限"
@@ -182,7 +182,7 @@ class stepOne extends Component {
                             <Option value="10">10年</Option>
                             <Option value="more">10年以上</Option>
                         </Select>
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     {...formItemLayout}
@@ -196,7 +196,7 @@ class stepOne extends Component {
                         ],
                     })(
                         <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     {...formItemLayout}
@@ -211,7 +211,7 @@ class stepOne extends Component {
                         }],
                     })(
                         <Input />
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     {...formItemLayout}
@@ -235,7 +235,7 @@ class stepOne extends Component {
                         >
                             <Input />
                         </AutoComplete>
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     wrapperCol={{
@@ -315,7 +315,7 @@ class stepTwo extends Component {
                         rules: [{ required: true, message: '请输入学校名称!', whitespace: true }],
                     })(
                         <Input />
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     {...formItemLayout}
@@ -326,7 +326,7 @@ class stepTwo extends Component {
                         rules: [{ required: true, message: '请输入所学专业!', whitespace: true }],
                     })(
                         <Input />
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     label="学历"
@@ -344,7 +344,7 @@ class stepTwo extends Component {
                             <Option value="博士">博士</Option>
                             <Option value="其他">其他</Option>
                         </Select>
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     label="毕业年份"
@@ -362,7 +362,7 @@ class stepTwo extends Component {
                                 })
                             }
                         </Select>
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     wrapperCol={{
@@ -445,7 +445,7 @@ class stepThree extends Component {
                         rules: [{ required: true, message: '请输入期望职位!', whitespace: true }],
                     })(
                         <Input />
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     label="工作状态"
@@ -460,7 +460,7 @@ class stepThree extends Component {
                             <Option value="兼职">兼职</Option>
                             <Option value="实习">实习</Option>
                         </Select>
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     {...formItemLayout}
@@ -471,7 +471,7 @@ class stepThree extends Component {
                         rules: [{ required: true, message: '世界那么大？你想去哪儿?', whitespace: true }],
                     })(
                         <Input />
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     label="期望月薪"
@@ -491,7 +491,7 @@ class stepThree extends Component {
                             <Option value="25k-50k">25k-50k</Option>
                             <Option value="50k以上">50k以上</Option>
                         </Select>
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     wrapperCol={{
@@ -617,7 +617,7 @@ class stepFour extends Component {
                                 rules: [{ required: true, message: '请输入公司名称!', whitespace: true }],
                             })(
                                 <Input />
-                                )}
+                            )}
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
@@ -627,7 +627,7 @@ class stepFour extends Component {
                                 rules: [{ required: true, message: '请输入所任职位!', whitespace: true }],
                             })(
                                 <Input />
-                                )}
+                            )}
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
@@ -637,7 +637,7 @@ class stepFour extends Component {
                                 rules: [{ type: 'array', required: true, message: '请选择在职时间!' }],
                             })(
                                 <RangePicker />
-                                )}
+                            )}
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
@@ -647,7 +647,7 @@ class stepFour extends Component {
                                 rules: [{ required: true, message: '请输入工作内容!', whitespace: true }],
                             })(
                                 <TextArea autosize={{ minRows: 4 }} />
-                                )}
+                            )}
                         </FormItem>
                         <FormItem
                             wrapperCol={{
@@ -782,7 +782,7 @@ class stepFive extends Component {
                                 rules: [{ required: true, message: '请输入项目名称!', whitespace: true }],
                             })(
                                 <Input />
-                                )}
+                            )}
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
@@ -792,7 +792,7 @@ class stepFive extends Component {
                                 rules: [{ required: true, message: '请告诉我们你在该项目中承担了哪些责任?', whitespace: true }],
                             })(
                                 <Input />
-                                )}
+                            )}
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
@@ -802,7 +802,7 @@ class stepFive extends Component {
                                 rules: [{ type: 'array', required: true, message: '请选择项目起止时间!' }],
                             })(
                                 <RangePicker />
-                                )}
+                            )}
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
@@ -812,7 +812,7 @@ class stepFive extends Component {
                                 rules: [{ required: true, message: '请告诉我们这个项目有多牛逼!', whitespace: true }],
                             })(
                                 <TextArea autosize={{ minRows: 4 }} />
-                                )}
+                            )}
                         </FormItem>
                         <FormItem
                             wrapperCol={{
@@ -894,7 +894,7 @@ class stepSix extends Component {
                         rules: [{ required: true, message: '我们非常想了解一个出色的你!', whitespace: true }],
                     })(
                         <TextArea autosize={{ minRows: 6 }} />
-                        )}
+                    )}
                 </FormItem>
                 <FormItem
                     wrapperCol={{
@@ -1121,6 +1121,17 @@ class Resume extends Component {
                             }
                         })()
                     }
+                    <div className="timeline">
+                        <Timeline>
+                            <Timeline.Item dot={this.state.step === 1 ? <Icon type="clock-circle-o" style={{ fontSize: '16px' }} /> : ''} color="blue">基本信息</Timeline.Item>
+                            <Timeline.Item dot={this.state.step === 2 ? <Icon type="clock-circle-o" style={{ fontSize: '16px' }} /> : ''} color="blue">教育经历</Timeline.Item>
+                            <Timeline.Item dot={this.state.step === 3 ? <Icon type="clock-circle-o" style={{ fontSize: '16px' }} /> : ''} color="blue">期望工作</Timeline.Item>
+                            <Timeline.Item dot={this.state.step === 4 ? <Icon type="clock-circle-o" style={{ fontSize: '16px' }} /> : ''} color="blue">工作经历</Timeline.Item>
+                            <Timeline.Item dot={this.state.step === 5 ? <Icon type="clock-circle-o" style={{ fontSize: '16px' }} /> : ''} color="blue">项目经验</Timeline.Item>
+                            <Timeline.Item dot={this.state.step === 6 ? <Icon type="clock-circle-o" style={{ fontSize: '16px' }} /> : ''} color="blue">自我描述</Timeline.Item>
+                            <Timeline.Item dot={this.state.step === 7 ? <Icon type="clock-circle-o" style={{ fontSize: '16px' }} /> : ''} color="blue">作品展示</Timeline.Item>
+                        </Timeline>
+                    </div>
                 </div>
                 <Modal title="上传照片"
                     okText="上传"

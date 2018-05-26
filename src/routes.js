@@ -18,6 +18,7 @@ import EmployeeInfoList from './components/employeeInfoList'
 import workRecord from './components/workRecord'
 import holidayList from './components/holidayList'
 import message from './pages/message';
+import evaluate from './pages/evaluate'
 
 export default () => (
     <Router history={hashHistory}>
@@ -40,5 +41,6 @@ export default () => (
         </Route>
         <Route path="sendresume" component={SendResume}></Route>
         <Route path="message" component={message}></Route>
+        <Route path="evaluate" component={evaluate}></Route>
     </Router>
 )

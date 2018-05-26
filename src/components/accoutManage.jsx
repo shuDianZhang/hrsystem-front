@@ -14,8 +14,8 @@ export default class AccoutManage extends Component {
             { title: '账户', dataIndex: '_id' },
             { title: '姓名', dataIndex: 'name' },
             {
-                title: '删除账户', key: 'delete', render: (text, record) => (
-                    <Button type="danger" onClick={this.deleteAccount.bind(this, record)} size="small">删除</Button>
+                title: '删除账户', key: 'delete', render: (text, record, index) => (
+                    <Button type="danger" onClick={this.deleteAccount.bind(this, index, record)} size="small">删除</Button>
                 )
             },
             {
@@ -27,8 +27,11 @@ export default class AccoutManage extends Component {
         ];
         this.searchAccount = this.searchAccount.bind(this);
     }
-    deleteAccount(record) {
-
+    deleteAccount(index, record) {
+        let arr = this.state.dataContent;
+        arr.splice(index, 1);
+        this.setState({ dataContent: arr });
+        message.success('账户删除成功!');
     }
     resetPassword(record) {
         fetch(`http://localhost:3111/upload/resetAccount`, {
@@ -53,7 +56,6 @@ export default class AccoutManage extends Component {
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 0) {
-                    console.log(data.content);
                     this.setState({ dataContent: data.content });
                 } else if (data.status === 2) {
                     message.warn(data.msg);

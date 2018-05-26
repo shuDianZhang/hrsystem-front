@@ -25,3 +25,23 @@
 .little-long {
     width: 250px;
 }
+.headImageContainer {
+    position: absolute;
+    right: 50px;
+    top: 80px;
+    width: 200px;
+    height: 230px;
+    border: 1px solid #eeeeee;
+    overflow: hidden;
+}
+.headImage {
+   width: 200px;
+}
+.showGoodResult {
+    width: 750px;
+    margin: 0 auto;
+    border: 1px solid #eeeeee;
+}
+.goodResult {
+    width: 750px;
+}

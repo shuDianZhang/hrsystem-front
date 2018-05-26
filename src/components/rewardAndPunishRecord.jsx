@@ -4,8 +4,14 @@ import { DatePicker, Button, Timeline } from 'antd';
 import './css/rewardAndPunishRecord.css'
 
 export default class Record extends Component {
+    constructor() {
+        super();
+        this.state = {
+            workRecord: null
+        }
+    }
     componentDidMount() {
-        fetch('http://localhost:3111/search/getWorkRecord', {
+        fetch(`http://localhost:3111/search/getWorkRecord`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include'
@@ -13,18 +19,24 @@ export default class Record extends Component {
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 0) {
-                    console.log(data);
+                    let workRecord = data.content;
+                    this.setState({ workRecord });
                 } else {
                     message.warn(data.msg);
                 }
             }, (err) => { })
     }
     render() {
+        if (this.state.workRecord) {
+            var timeline = this.state.workRecord.map(function (item, index) {
+                return <Timeline.Item color={item.good ? 'green' : 'red'}><span>{item.date}</span>&nbsp;&nbsp;&nbsp;{item.good ? item.good : item.bad}</Timeline.Item>
+            });
+        }
         return (
             <div>
                 <div className="record">
                     <Timeline>
-                        <Timeline.Item color="green"><span>2018-01-01</span>&nbsp;&nbsp;&nbsp;优秀技术标兵</Timeline.Item>
+                        {timeline}
                     </Timeline>
                 </div>
             </div>

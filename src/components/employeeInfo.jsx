@@ -45,14 +45,6 @@ export default class EmployeeInfo extends Component {
                 <h2>职位信息：</h2>
                 <span className="infoTag">所属部门：</span><div className="job">{this.state.content.dept}</div><br />
                 <span className="infoTag">职位：</span><div className="job">{this.state.content.job}</div><br />
-                <span className="infoTag">所获荣誉：</span>
-                <Timeline className="reward">
-                    {
-                        this.state.content.honor.map(function (item, index) {
-                            return <Timeline.Item key={index}>{item}</Timeline.Item>
-                        })
-                    }
-                </Timeline>
             </div>
         )
     }

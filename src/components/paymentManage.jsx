@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { DatePicker, Table, Button, Modal, Input, Form } from 'antd';
+import { DatePicker, Table, Button, Modal, Input, Form, message } from 'antd';
 import './css/payment.css';
 
 const FormItem = Form.Item;
@@ -77,8 +77,10 @@ class PaymentManage extends Component {
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    console.log(data);
                     if (data.status === 0) {
-                        message.error('薪资更新成功!');
+                        message.success('薪资更新成功!');
+                        that.setState({ visible: false });
                     } else {
                         message.error(data.msg);
                     }
